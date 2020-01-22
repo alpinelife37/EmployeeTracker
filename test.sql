@@ -4,45 +4,24 @@ CREATE database employee_tracker;
 USE employee_tracker;
 
 
-CREATE TABLE DEPARTMENT
+CREATE TABLE Employee
 (
-    ID INT NOT NULL
-    AUTO_INCREMENT,
-	NAME VARCHAR
-    (100),
-	PRIMARY KEY
-    (ID)
+    id INT NOT NULL AUTO_INCREMENT,
+	 first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    role_id INT NOT NULL,
+    manager_id INT,
+	PRIMARY KEY(id)
 );
-    CREATE TABLE ROLES
-    (
-        ID INT NOT NULL
-        AUTO_INCREMENT,
-	TITLE VARCHAR
-        (100),
-	SALARY INT,
-	DEPARTMENT_ID INT NOT NULL,
-	PRIMARY KEY
-        (ID),
-	CONSTRAINT fk_department FOREIGN KEY
-        (DEPARTMENT_ID) REFERENCES DEPARTMENT
-        (ID)
-);
-        CREATE TABLE EMPLOYEES
-        (
-            ID INT NOT NULL
-            AUTO_INCREMENT,
-	FIRST_NAME VARCHAR
-            (100),
-	LAST_NAME VARCHAR
-            (100),
-	ROLE_ID	INT NOT NULL,
-	MANAGER_ID INT NOT NULL,
-	PRIMARY KEY
-            (ID),
-	CONSTRAINT fk_role FOREIGN KEY
-            (ROLE_ID) REFERENCES ROLES
-            (ID),
-	CONSTRAINT fk_manager FOREIGN KEY
-            (MANAGER_ID) REFERENCES EMPLOYEES
-            (ID)
+    CREATE TABLE role (
+        id INT NOT NULL AUTO_INCREMENT,
+	    title VARCHAR(100) NOT NULL,
+	    salary DECIMAL(65) NOT NULL,
+	    department_id INT NOT NULL,
+	    PRIMARY KEY (id)
+ );
+        CREATE TABLE department (
+            id INT NOT NULL AUTO_INCREMENT,
+	        department VARCHAR(100) NOT NULL,
+		    PRIMARY KEY (ID)
 );
