@@ -1,6 +1,10 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const clear = require('clear');
+const chalk = require('chalk');
+const figlet = require('figlet');
 const consoleTable = require("console.table");
+
 
 var connection = mysql.createConnection({
   host: "localHost",
@@ -17,6 +21,19 @@ connection.connect(function(err) {
 });
 
 function promptQuestions() {
+  clear();
+  console.log( 
+    chalk.yellow(
+        figlet.textSync('Employee', {horizontalLayout: 'full'})
+    )
+  );
+  console.log( 
+    chalk.red(
+        figlet.textSync('Manager', {horizontalLayout: 'full'})
+    )
+  );
+
+
   inquirer
     .prompt({
       type: "rawlist",
@@ -76,7 +93,7 @@ function viewAllEmp() {
     if (err) throw err;
     console.table(res);
   });
-  promptQuestions();
+    promptQuestions();
 }
 
 function viewAllDept() {
