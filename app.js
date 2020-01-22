@@ -21,7 +21,7 @@ connection.connect(function(err) {
 });
 
 function promptQuestions() {
-  clear();
+  console.clear();
   console.log( 
     chalk.yellow(
         figlet.textSync('Employee', {horizontalLayout: 'full'})
@@ -91,14 +91,26 @@ function promptQuestions() {
 function viewAllEmp() {
   connection.query("SELECT *  FROM employee", function(err, res) {
     if (err) throw err;
-    console.table(res);
+    console.clear();
+    console.log( 
+      chalk.yellow(
+          figlet.textSync('Employees', {horizontalLayout: 'default'})
+      )
+    );
+       console.table(res);
   });
-    promptQuestions();
+      promptQuestions();
 }
 
 function viewAllDept() {
   connection.query("SELECT *  FROM department", function(err, res) {
     if (err) throw err;
+    console.clear();
+    console.log( 
+      chalk.green(
+          figlet.textSync('Departments', {horizontalLayout: 'default'})
+      )
+    );
     console.table(res);
   });
   promptQuestions();
@@ -107,6 +119,12 @@ function viewAllDept() {
 function viewAllRole() {
   connection.query("SELECT *  FROM role", function(err, res) {
     if (err) throw err;
+    console.clear();
+    console.log( 
+      chalk.magenta(
+          figlet.textSync('Roles', {horizontalLayout: 'default'})
+      )
+    );
     console.table(res);
   });
   promptQuestions();
