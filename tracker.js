@@ -122,14 +122,21 @@ function addEmp() {
           name: "role",
           message: "What is the employees role?",
           choices: roles
+        },
+        {
+          type: "list",
+          name: "managerId",
+          message: "What is the employees manager ID?",
+          choices: ["1", "2", "3", "4"] 
         }
       ])
       .then(function(answers) {
         answers.firstName;
         answers.lastName;
         answers.role;
+        answers.managerId;
         connection.query(
-          `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${answers.firstName}, ${answers.lastName}, ${answers.role} );`
+          `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES("${answers.firstName}", "${answers.lastName}", "${answers.role}", "${answers.managerId}" );`
         );
       });
   });

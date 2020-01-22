@@ -47,13 +47,41 @@ CREATE TABLE Employee
  );
 
 INSERT INTO department (name)
- VALUES ("Engineer");
+ VALUES ("Operations"),
+            ("Production"),
+            ("HR"),
+            ("Sales");
 
  INSERT INTO role (title, salary, department_id)
- VALUES ("Manager", 90000, 1);
+ VALUES ("Operations Director", 190000, 1),
+                ("Operations Manager", 120000, 1),
+                ("Operations Intern", 85000, 1),
+                ("Production Director", 150000, 2),
+                ("Production Manager", 110000, 2),     
+                ("Production Intern", 65000, 2),
+                ("HR Director", 220000, 3),
+                ("HR Manager", 175000, 3),
+               ("HR Intern", 90000, 3),
+               ("Sales Director", 175000, 4),
+               ("Sales Manager", 145000, 4),
+               ("Sales Intern", 65000, 4);
 
  INSERT INTO employee (first_name, last_name, role_id, manager_id)
- VALUES ("Jim", "Son", 1, 1);
+ VALUES ("Saad", "Maan", 1, NULL),
+                ("Sam", "Sung", 2, 1),
+                ("Hitler", "Mussolini", 3, 2),
+                ("Paul ", "Twocock", 4, 3),
+                ("Dick", "Long", 5, NULL),
+                ("Mike", "Litoris", 6, 4),
+                ("Moo", "Lester", 7, 5),
+                ("F", "You", 8, 6),
+                ("Kash", "Register", 9, NULL),
+                ("Donald", "Duck", 10, 7),
+                ("Crystal", "Methven", 11, 8),
+                ("MacDonald", "Berger", 12, 9),
+                ("Jack", "Daniels", 13, NULL);
+
+
 
  
  
