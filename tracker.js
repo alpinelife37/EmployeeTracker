@@ -34,7 +34,7 @@ function promptQuestions() {
       ]
     })
     .then(function(answer) {
-      switch (answer.action) {
+      switch (answer.choices) {
         case "View All Employees":
           viewAllEmp();
           break;
@@ -64,6 +64,7 @@ function promptQuestions() {
           break;
 
         case "Quit":
+          //connection.end()
           quit();
           break;
       }
@@ -71,21 +72,41 @@ function promptQuestions() {
 }
 
 function viewAllEmp() {
-  console.log("View all employees ");
-  promptQuestions();
+connection.query("SELECT *  FROM employee", function(err, res){
+  if (err) throw err;
+  console.table(res);
+} )
+promptQuestions();
+
 }
 
 function viewAllDept() {
-  console.log("View All Departments");
+  connection.query("SELECT *  FROM department", function(err, res){
+    if (err) throw err;
+    console.table(res);
+  } )
   promptQuestions();
 }
 
 function viewAllRole() {
-  console.log("View All Roles");
+  connection.query("SELECT *  FROM role", function(err, res){
+    if (err) throw err;
+    console.table(res);
+  } )
   promptQuestions();
 }
 
 function addEmp() {
+
+  connection.query("SELECT title FROM role", function(err, res){
+    if (err) throw err;
+    console.table(res)
+ 
+const roles = []
+for(let i = 0; i< res.length; i++){
+  roles.push(res[i].title)
+}
+
   inquirer.prompt([
     {
       type: "input",
@@ -94,17 +115,24 @@ function addEmp() {
     },
     {
       type: "input",
-      name: "flastName",
+      name: "lastName",
       message: "What is the employees last name?"
     },
     {
       type: "list",
       name: "role",
-      message: "What is the employees first name?"
+      message: "What is the employees role?",
+      choices: roles
     }
-  ]);
-
-  console.log("Add Employee");
+  ])
+  .then( function(answers){
+answers.firstName
+answers.lastName
+answers.role
+connection.query (`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${answers.firstName}, ${answers.lastName}, ${answers.role}  )` )
+  } )
+})
+  console.log("You added an employee");
 
   promptQuestions();
 }
