@@ -39,28 +39,28 @@ function promptQuestions() {
           viewAllEmp();
           break;
 
-        case "Add Employee":
-          addEmp();
-          break;
-
-        case "Update Employee Role":
-          UpdateEmpRole();
+        case "View All Departments":
+          viewAllDept();
           break;
 
         case "View All Roles":
           viewAllRole();
           break;
 
-        case "Add Role":
-          addRole();
-          break;
-
-        case "View All Departments":
-          viewAllDept();
+        case "Add Employee":
+          addEmp();
           break;
 
         case "Add Department":
           addDept();
+          break;
+
+        case "Add Role":
+          addRole();
+          break;
+
+        case "Update Employee Role":
+          UpdateEmpRole();
           break;
 
         case "Quit":
@@ -72,71 +72,72 @@ function promptQuestions() {
 }
 
 function viewAllEmp() {
-connection.query("SELECT *  FROM employee", function(err, res){
-  if (err) throw err;
-  console.table(res);
-} )
-promptQuestions();
-
+  connection.query("SELECT *  FROM employee", function(err, res) {
+    if (err) throw err;
+    console.table(res);
+  });
+  promptQuestions();
 }
 
 function viewAllDept() {
-  connection.query("SELECT *  FROM department", function(err, res){
+  connection.query("SELECT *  FROM department", function(err, res) {
     if (err) throw err;
     console.table(res);
-  } )
+  });
   promptQuestions();
 }
 
 function viewAllRole() {
-  connection.query("SELECT *  FROM role", function(err, res){
+  connection.query("SELECT *  FROM role", function(err, res) {
     if (err) throw err;
     console.table(res);
-  } )
+  });
   promptQuestions();
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function addEmp() {
-
-  connection.query("SELECT title FROM role", function(err, res){
+  connection.query("SELECT title FROM role", function(err, res) {
     if (err) throw err;
-    console.table(res)
- 
-const roles = []
-for(let i = 0; i< res.length; i++){
-  roles.push(res[i].title)
-}
+    console.table(res);
 
-  inquirer.prompt([
-    {
-      type: "input",
-      name: "firstName",
-      message: "What is the employees first name?"
-    },
-    {
-      type: "input",
-      name: "lastName",
-      message: "What is the employees last name?"
-    },
-    {
-      type: "list",
-      name: "role",
-      message: "What is the employees role?",
-      choices: roles
+    const roles = [];
+    for (let i = 0; i < res.length; i++) {
+      roles.push(res[i].title);
     }
-  ])
-  .then( function(answers){
-answers.firstName
-answers.lastName
-answers.role
-connection.query (`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${answers.firstName}, ${answers.lastName}, ${answers.role}  )` )
-  } )
-})
+
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "firstName",
+          message: "What is the employees first name?"
+        },
+        {
+          type: "input",
+          name: "lastName",
+          message: "What is the employees last name?"
+        },
+        {
+          type: "list",
+          name: "role",
+          message: "What is the employees role?",
+          choices: roles
+        }
+      ])
+      .then(function(answers) {
+        answers.firstName;
+        answers.lastName;
+        answers.role;
+        connection.query(
+          `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${answers.firstName}, ${answers.lastName}, ${answers.role} );`
+        );
+      });
+  });
   console.log("You added an employee");
 
   promptQuestions();
 }
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function addDept() {
   console.log("Add Department");
   promptQuestions();
