@@ -1,16 +1,15 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const clear = require('clear');
-const chalk = require('chalk');
-const figlet = require('figlet');
+const clear = require("clear");
+const chalk = require("chalk");
+const figlet = require("figlet");
 const consoleTable = require("console.table");
-
 
 var connection = mysql.createConnection({
   host: "localHost",
   port: 3306,
   user: "root",
-  password: "sanders",
+  password: "1982",
   database: "employee_tracker"
 });
 
@@ -22,17 +21,12 @@ connection.connect(function(err) {
 
 function promptQuestions() {
   console.clear();
-  console.log( 
-    chalk.yellow(
-        figlet.textSync('Employee', {horizontalLayout: 'full'})
-    )
+  console.log(
+    chalk.yellow(figlet.textSync("Employee", { horizontalLayout: "full" }))
   );
-  console.log( 
-    chalk.red(
-        figlet.textSync('Manager', {horizontalLayout: 'full'})
-    )
+  console.log(
+    chalk.red(figlet.textSync("Manager", { horizontalLayout: "full" }))
   );
-
 
   inquirer
     .prompt({
@@ -92,23 +86,23 @@ function viewAllEmp() {
   connection.query("SELECT *  FROM employee", function(err, res) {
     if (err) throw err;
     console.clear();
-    console.log( 
+    console.log(
       chalk.yellow(
-          figlet.textSync('Employees', {horizontalLayout: 'default'})
+        figlet.textSync("Employees", { horizontalLayout: "default" })
       )
     );
-       console.table(res);
+    console.table(res);
   });
-      promptQuestions();
+  promptQuestions();
 }
 
 function viewAllDept() {
   connection.query("SELECT *  FROM department", function(err, res) {
     if (err) throw err;
     console.clear();
-    console.log( 
+    console.log(
       chalk.green(
-          figlet.textSync('Departments', {horizontalLayout: 'default'})
+        figlet.textSync("Departments", { horizontalLayout: "default" })
       )
     );
     console.table(res);
@@ -120,10 +114,8 @@ function viewAllRole() {
   connection.query("SELECT *  FROM role", function(err, res) {
     if (err) throw err;
     console.clear();
-    console.log( 
-      chalk.magenta(
-          figlet.textSync('Roles', {horizontalLayout: 'default'})
-      )
+    console.log(
+      chalk.magenta(figlet.textSync("Roles", { horizontalLayout: "default" }))
     );
     console.table(res);
   });
@@ -162,7 +154,7 @@ function addEmp() {
           type: "list",
           name: "managerId",
           message: "What is the employees manager ID?",
-          choices: ["1", "2", "3", "4"] 
+          choices: ["1", "2", "3", "4"]
         }
       ])
       .then(function(answers) {
