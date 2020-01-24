@@ -123,72 +123,111 @@ function viewAllRole() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function addEmp() {
-  const roles = [];
-  const man = [];
   connection.query("SELECT title FROM role", function(err, res) {
     if (err) throw err;
-    console.table(res);
+    //console.table(res);
+    const roles = [];
     for (let i = 0; i < res.length; i++) {
       roles.push(res[i].title);
     }
-  });
 
-  connection.query("SELECT manager_id FROM employee", function(err, result) {
-    if (err) throw error;
-    console.table(result);
-
-    for (let i = 0; i < result.length; i++) {
-      man.push(result[i].manager_id);
-    }
-  });
-  console.log("right here");
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "firstName",
-        message: "What is the employees first name?"
-      },
-      {
-        type: "input",
-        name: "lastName",
-        message: "What is the employees last name?"
-      },
-      {
-        type: "list",
-        name: "role",
-        message: "What is the employees role?",
-        choices: roles
-      },
-      {
-        type: "list",
-        name: "managerId",
-        message: "What is the employees manager ID?",
-        choices: man
+    connection.query("SELECT manager_id FROM employee", function(err, result) {
+      if (err) throw error;
+      console.table(result);
+      //const man = [];
+      for (let i = 0; i < result.length; i++) {
+        man.push(result[i].manager_id);
       }
-    ])
-    .then(function(answers) {
-      answers.firstName;
-      answers.lastName;
-      answers.role;
-      answers.managerId;
-      connection.query(
-        `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES("${answers.firstName}", "${answers.lastName}", "${answers.role}", "${answers.managerId}" );`
-      );
-    });
 
+      console.log("right here");
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "firstName",
+            message: "What is the employees first name?"
+          },
+          {
+            type: "input",
+            name: "lastName",
+            message: "What is the employees last name?"
+          },
+          {
+            type: "list",
+            name: "role",
+            message: "What is the employees role?",
+            choices: roles
+          }
+          // {
+          //   type: "list",
+          //   name: "managerId",
+          //   message: "What is the employees manager ID?",
+          //   choices: man
+          // }
+        ])
+        .then(function(answers) {
+          answers.firstName;
+          answers.lastName;
+          answers.role;
+          //answers.managerId;
+          connection.query(
+            `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES("${answers.firstName}", "${answers.lastName}", "${answers.role}", 11 );`
+          );
+        });
+    });
+  });
   console.log("You added an employee");
   promptQuestions();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function addDept() {
-  console.log("Add Department");
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "dept",
+        message: "What is the department you want to add?"
+      }
+    ])
+    .then(function(res) {
+      res.dept;
+      connection.query(`INSERT INTO department (name) VALUES("${res.dept}");`);
+    });
+
+  console.log("You added a Department");
   promptQuestions();
 }
 
 function addRole() {
-  console.log("Add Role");
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "role",
+        message: "What is the role you want to add?"
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary for this role?"
+      },
+      {
+        type: "input",
+        name: "dept_id",
+        message: "What is the department id for this role?"
+      }
+    ])
+    .then(function(res) {
+      res.role;
+      res.salary;
+      res.dept_id;
+      connection.query(
+        `INSERT INTO role (title, salary, department_id) VALUES("${res.dept}","${res.salary}", "${res.detp_id}");`
+      );
+    });
+
+  console.log("You added a role!");
   promptQuestions();
 }
 
