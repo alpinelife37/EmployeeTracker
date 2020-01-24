@@ -20,7 +20,7 @@ connection.connect(function(err) {
 });
 
 function promptQuestions() {
-  //console.clear();
+  console.clear();
   console.log(
     chalk.yellow(figlet.textSync("Employee", { horizontalLayout: "full" }))
   );
@@ -75,7 +75,6 @@ function promptQuestions() {
           break;
 
         case "Quit":
-          //connection.end()
           quit();
           break;
       }
@@ -121,25 +120,8 @@ function viewAllRole() {
   });
   promptQuestions();
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function addEmp() {
-  // connection.query("SELECT title FROM role", function(err, res) {
-  //   if (err) throw err;
-  //   //console.table(res);
-  //   const roles = [];
-  //   for (let i = 0; i < res.length; i++) {
-  //     roles.push(res[i].title);
-  //   }
-
-  //   connection.query("SELECT manager_id FROM employee", function(err, result) {
-  //     if (err) throw error;
-  //     console.table(result);
-  //     //const man = [];
-  //     for (let i = 0; i < result.length; i++) {
-  //       man.push(result[i].manager_id);
-  //     }
-
-  //  console.log("right here");
   inquirer
     .prompt([
       {
@@ -165,15 +147,7 @@ function addEmp() {
         choices: [1, 2, 3, 4, 5, 6, 7, 8, 9, "null"]
       }
     ])
-    // .then(function(answers) {
-    //   answers.firstName;
-    //   answers.lastName;
-    //   answers.role;
-    //   //answers.managerId;
-    //   connection.query(
-    //     `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES("${answers.firstName}", "${answers.lastName}", "${answers.role}", 11 );`
-    //   );
-    // });
+
     .then(val => {
       connection.query(
         "INSERT INTO employee SET ?",
@@ -182,8 +156,6 @@ function addEmp() {
           last_name: val.lastName,
           role_id: val.role,
           manager_id: val.man
-          //   });
-          // });
         },
         function(err, res) {
           if (err) throw err;
@@ -193,7 +165,6 @@ function addEmp() {
     });
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function addDept() {
   inquirer
     .prompt([
