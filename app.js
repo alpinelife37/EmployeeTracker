@@ -190,13 +190,22 @@ function addDept() {
         message: "What is the department you want to add?"
       }
     ])
-    .then(function(res) {
-      res.dept;
-      connection.query(`INSERT INTO department (name) VALUES("${res.dept}");`);
-    });
 
-  console.log("You added a Department");
-  promptQuestions();
+    .then(val => {
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          name: val.dept
+        },
+        function(err, res) {
+          if (err) throw err;
+          console.log(res.affectedRows + " Database updated.\n");
+          promptQuestions();
+        }
+      );
+      departments.push(JSON.stringify(val.name));
+      console.log(departments);
+    });
 }
 
 function addRole() {
