@@ -132,6 +132,16 @@ function addEmp() {
       roles.push(res[i].title);
     }
 
+    // connection.query("SELECT manager_id FROM employee", function(err, result) {
+    //   if (err) throw error;
+    //   console.table(result);
+    // });
+
+    // const man = [];
+    // for (let i = 0; i < result.length; i++) {
+    //   man.push(result(i).manager_id);
+    // }
+
     inquirer
       .prompt([
         {
@@ -149,13 +159,13 @@ function addEmp() {
           name: "role",
           message: "What is the employees role?",
           choices: roles
-        },
-        {
-          type: "list",
-          name: "managerId",
-          message: "What is the employees manager ID?",
-          choices: ["1", "2", "3", "4"]
         }
+        // {
+        //   type: "list",
+        //   name: "managerId",
+        //   message: "What is the employees manager ID?",
+        //   choices: man
+        // }
       ])
       .then(function(answers) {
         answers.firstName;
