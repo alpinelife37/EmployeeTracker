@@ -218,7 +218,7 @@ function addRole() {
         message: "What is the salary for this role?"
       },
       {
-        type: "input",
+        type: "list",
         name: "dept_id",
         message: "What is the department id for this role?",
         choices: [1, 2, 3, 4]
@@ -237,8 +237,6 @@ function addRole() {
           promptQuestions();
         }
       );
-      // departments.push(JSON.stringify(val.name));
-      // console.log(departments);
     });
 }
 
