@@ -20,7 +20,7 @@ connection.connect(function(err) {
 });
 
 function promptQuestions() {
-  console.clear();
+  //console.clear();
   console.log(
     chalk.yellow(figlet.textSync("Employee", { horizontalLayout: "full" }))
   );
@@ -190,7 +190,6 @@ function addDept() {
         message: "What is the department you want to add?"
       }
     ])
-
     .then(val => {
       connection.query(
         "INSERT INTO department SET ?",
@@ -199,12 +198,9 @@ function addDept() {
         },
         function(err, res) {
           if (err) throw err;
-          console.log(res.affectedRows + " Database updated.\n");
           promptQuestions();
         }
       );
-      departments.push(JSON.stringify(val.name));
-      console.log(departments);
     });
 }
 
@@ -224,20 +220,26 @@ function addRole() {
       {
         type: "input",
         name: "dept_id",
-        message: "What is the department id for this role?"
+        message: "What is the department id for this role?",
+        choices: [1, 2, 3, 4]
       }
     ])
-    .then(function(res) {
-      res.role;
-      res.salary;
-      res.dept_id;
+    .then(val => {
       connection.query(
-        `INSERT INTO role (title, salary, department_id) VALUES("${res.dept}","${res.salary}", "${res.detp_id}");`
+        "INSERT INTO role SET ?",
+        {
+          title: val.role,
+          salary: val.salary,
+          department_id: val.dept_id
+        },
+        function(err, res) {
+          if (err) throw err;
+          promptQuestions();
+        }
       );
+      // departments.push(JSON.stringify(val.name));
+      // console.log(departments);
     });
-
-  console.log("You added a role!");
-  promptQuestions();
 }
 
 function UpdateEmpRole() {
