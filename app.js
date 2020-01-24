@@ -138,7 +138,7 @@ function addEmp() {
     // });
 
     // const man = [];
-    // for (let i = 0; i < result.length; i++) {
+    // for (let i = 0; i < result.length; i++) {cd doc
     //   man.push(result(i).manager_id);
     // }
 
