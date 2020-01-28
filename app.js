@@ -227,112 +227,51 @@ function addRole() {
 const queryAllEmployeesSimple = `SELECT id, concat(first_name, " ", last_name) AS name FROM employee`;
 const queryAllRoles = `SELECT id, title, salary FROM role;`;
 
-const updateEmpRole = function() {
-  connection.query(
-    `${queryAllEmployeesSimple};${queryAllRoles};`,
-    //   `SELECT title FROM role; SELECT concat(employee.first_name, " ", employee.last_name) AS name, role.title
-    // FROM employee JOIN role ON (employee.role_id = role.id);`,
-    (err, res, fields) => {
-      if (err) throw err;
-      const employees = res[0].map(item => {
-        const newItem = {
-          id: item.id,
-          name: item.name
-        };
-        return newItem;
-      });
-      const roles = res[1].map(item => {
-        const newItem = {
-          id: item.id,
-          name: item.title
-        };
-        return newItem;
-      });
-      inquirer
-        .prompt([
-          {
-            type: "list",
-            name: "hasNewRole",
-            choices: employees,
-            message: "Which employee would you like to update?"
-          },
-          {
-            type: "list",
-            name: "newRole",
-            choices: roles,
-            message: "What is their new role?"
-          }
-        ])
-        .then(answers => {
-          console.log(answers);
-          connection.query(
-            queryUpdateEmployeeRole,
-            [answers.newRole, answers.hasNewRole],
-            (err, res, fields) => {
-              if (err) throw err;
-              promptQuestions();
-            }
-          );
-        });
-    }
-  );
-};
-// const UpdateEmpRole = () => {
+// const updateEmpRole = function() {
 //   connection.query(
-//   `SELECT title FROM role; SELECT concat(employee.first_name, " ", employee.last_name) AS Name, role.title
-// FROM employee JOIN role ON (employee.role_id = role.id);`,
-//     function(err, res) {
-//       const listOfRoles = res[0].map(item => {
-//         const roles = {
+//     //`${queryAllEmployeesSimple};${queryAllRoles};`,
+//     //`SELECT title FROM role; SELECT concat(employee.first_name, " ", employee.last_name) AS name, role.title
+//     //FROM employee JOIN role ON (employee.role_id = role.id);`,
+//     'SELECT id, concat(first_name, " ", last_name) AS name FROM employee; SELECT id, title, salary FROM role;',
+
+//     (err, res, fields) => {
+//       if (err) throw err;
+//       const employees = res[0].map(item => {
+//         const newItem = {
+//           id: item.id,
+//           name: item.name
+//         };
+//         return newItem;
+//       });
+//       const roles = res[1].map(item => {
+//         const newItem = {
+//           id: item.id,
 //           name: item.title
 //         };
-//         return roles;
+//         return newItem;
 //       });
-
-//       const listOfEmployees = res[1].map(item => {
-//         const employees = {
-//           name: item.Name,
-//           title: item.title
-//         };
-//         return employees;
-//       });
-
 //       inquirer
 //         .prompt([
 //           {
 //             type: "list",
-//             name: "employeeChoice",
-//             message: "Who's Role would you like to change?",
-//             choices: listOfEmployees
+//             name: "hasNewRole",
+//             choices: employees,
+//             message: "Which employee would you like to update?"
 //           },
 //           {
 //             type: "list",
 //             name: "newRole",
-//             message: "Choose the employees new Role",
-//             choices: listOfRoles
+//             choices: roles,
+//             message: "What is their new role?"
 //           }
 //         ])
 //         .then(answers => {
-//           const employeeFirstName = answers.employeeChoice
-//             .split(" ")
-//             .slice(0, -1)
-//             .join(" ");
-//           const employeeLastName = answers.employeeChoice
-//             .split(" ")
-//             .slice(-1)
-//             .join(" ");
-
+//           console.log(answers);
 //           connection.query(
-//             `UPDATE employee
-//         SET role_id = (SELECT id FROM (SELECT * FROM role) AS A WHERE title = "${answers.newRole}")
-//         WHERE id = (SELECT id from (SELECT * FROM employee) AS A
-//         WHERE first_name = "${employeeFirstName}"
-//         AND last_name = "${employeeLastName}");`,
-//             function(err, res) {
+//             queryUpdateEmployeeRole,
+//             [answers.newRole, answers.hasNewRole],
+//             (err, res, fields) => {
 //               if (err) throw err;
-//               console.log("\n");
-//               console.log("Updated role to: " + answers.newRole);
-//               console.log("\n");
 //               promptQuestions();
 //             }
 //           );
@@ -340,6 +279,78 @@ const updateEmpRole = function() {
 //     }
 //   );
 // };
+
+const updateEmpRole = () => {
+  connection.query(
+    `SELECT concat(employee.first_name, " ", employee.last_name) AS Name, role.title
+FROM employee JOIN role ON (employee.role_id = role.id);`,
+    function(err, res) {
+      console.log(res);
+    }
+  );
+  // const names = [];
+  // const roles = [];
+  // for (let i = 0; i < res.length; i++) names.push(res[i].first_name);
+  // for (let i = 0; i < res.length; i++) roles.push(res[i].title);
+
+  // const listOfRoles = res[0].map(item => {
+  //   const roles = {
+  //     name: item.title
+  //   };
+  //   return roles;
+  // });
+
+  // const listOfEmployees = res[1].map(item => {
+  //   const employees = {
+  //     name: item.Name,
+  //     title: item.title
+  //   };
+  //   return employees;
+  // });
+
+  //     inquirer
+  //       .prompt([
+  //         {
+  //           type: "list",
+  //           name: "employeeChoice",
+  //           message: "Who's Role would you like to change?",
+  //           choices: names
+  //         },
+  //         {
+  //           type: "list",
+  //           name: "newRole",
+  //           message: "Choose the employees new Role",
+  //           choices: roles
+  //         }
+  //       ])
+  //       .then(answers => {
+  //         const employeeFirstName = answers.employeeChoice
+  //           .split(" ")
+  //           .slice(0, -1)
+  //           .join(" ");
+  //         const employeeLastName = answers.employeeChoice
+  //           .split(" ")
+  //           .slice(-1)
+  //           .join(" ");
+
+  //         connection.query(
+  //           `UPDATE employee
+  //       SET role_id = (SELECT id FROM (SELECT * FROM role) AS A WHERE title = "${answers.newRole}")
+  //       WHERE id = (SELECT id from (SELECT * FROM employee) AS A
+  //       WHERE first_name = "${employeeFirstName}"
+  //       AND last_name = "${employeeLastName}");`,
+  //           function(err, res) {
+  //             if (err) throw err;
+  //             console.log("\n");
+  //             console.log("Updated role to: " + answers.newRole);
+  //             console.log("\n");
+  //             promptQuestions();
+  //           }
+  //         );
+  //       });
+  //   }
+  // );
+};
 
 function quit() {
   console.log("quit");
