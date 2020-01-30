@@ -17,7 +17,31 @@ connection.connect(function(err) {
   if (err) throw err;
   console.log("you are connected");
   promptQuestions();
+  queryRoles();
+  queryDepartments();
 });
+
+const departments = [];
+
+function queryDepartments() {
+  connection.query("SELECT name FROM department", function(err, res) {
+    if (err) throw err;
+    for (i = 0; i < res.length; i++) {
+      departments.push(res[i].name);
+    }
+  });
+}
+
+const roles = [];
+
+function queryRoles() {
+  connection.query("SELECT title FROM role", function(err, res) {
+    if (err) throw err;
+    for (i = 0; i < res.length; i++) {
+      roles.push(res[i].title);
+    }
+  });
+}
 
 function promptQuestions() {
   console.clear();
@@ -224,135 +248,65 @@ function addRole() {
     });
 }
 
-const queryAllEmployeesSimple = `SELECT id, concat(first_name, " ", last_name) AS name FROM employee`;
-const queryAllRoles = `SELECT id, title, salary FROM role;`;
-
-// const updateEmpRole = function() {
-//   connection.query(
-//     //`${queryAllEmployeesSimple};${queryAllRoles};`,
-//     //`SELECT title FROM role; SELECT concat(employee.first_name, " ", employee.last_name) AS name, role.title
-//     //FROM employee JOIN role ON (employee.role_id = role.id);`,
-//     'SELECT id, concat(first_name, " ", last_name) AS name FROM employee; SELECT id, title, salary FROM role;',
-
-//     (err, res, fields) => {
-//       if (err) throw err;
-//       const employees = res[0].map(item => {
-//         const newItem = {
-//           id: item.id,
-//           name: item.name
-//         };
-//         return newItem;
-//       });
-//       const roles = res[1].map(item => {
-//         const newItem = {
-//           id: item.id,
-//           name: item.title
-//         };
-//         return newItem;
-//       });
-//       inquirer
-//         .prompt([
-//           {
-//             type: "list",
-//             name: "hasNewRole",
-//             choices: employees,
-//             message: "Which employee would you like to update?"
-//           },
-//           {
-//             type: "list",
-//             name: "newRole",
-//             choices: roles,
-//             message: "What is their new role?"
-//           }
-//         ])
-//         .then(answers => {
-//           console.log(answers);
-//           connection.query(
-//             queryUpdateEmployeeRole,
-//             [answers.newRole, answers.hasNewRole],
-//             (err, res, fields) => {
-//               if (err) throw err;
-//               promptQuestions();
-//             }
-//           );
-//         });
-//     }
-//   );
-// };
-
-const updateEmpRole = () => {
-  connection.query(
-    `SELECT concat(employee.first_name, " ", employee.last_name) AS Name, role.title
-FROM employee JOIN role ON (employee.role_id = role.id);`,
-    function(err, res) {
-      console.log(res);
-    }
-  );
-  // const names = [];
-  // const roles = [];
-  // for (let i = 0; i < res.length; i++) names.push(res[i].first_name);
-  // for (let i = 0; i < res.length; i++) roles.push(res[i].title);
-
-  // const listOfRoles = res[0].map(item => {
-  //   const roles = {
-  //     name: item.title
-  //   };
-  //   return roles;
-  // });
-
-  // const listOfEmployees = res[1].map(item => {
-  //   const employees = {
-  //     name: item.Name,
-  //     title: item.title
-  //   };
-  //   return employees;
-  // });
-
-  //     inquirer
-  //       .prompt([
-  //         {
-  //           type: "list",
-  //           name: "employeeChoice",
-  //           message: "Who's Role would you like to change?",
-  //           choices: names
-  //         },
-  //         {
-  //           type: "list",
-  //           name: "newRole",
-  //           message: "Choose the employees new Role",
-  //           choices: roles
-  //         }
-  //       ])
-  //       .then(answers => {
-  //         const employeeFirstName = answers.employeeChoice
-  //           .split(" ")
-  //           .slice(0, -1)
-  //           .join(" ");
-  //         const employeeLastName = answers.employeeChoice
-  //           .split(" ")
-  //           .slice(-1)
-  //           .join(" ");
-
-  //         connection.query(
-  //           `UPDATE employee
-  //       SET role_id = (SELECT id FROM (SELECT * FROM role) AS A WHERE title = "${answers.newRole}")
-  //       WHERE id = (SELECT id from (SELECT * FROM employee) AS A
-  //       WHERE first_name = "${employeeFirstName}"
-  //       AND last_name = "${employeeLastName}");`,
-  //           function(err, res) {
-  //             if (err) throw err;
-  //             console.log("\n");
-  //             console.log("Updated role to: " + answers.newRole);
-  //             console.log("\n");
-  //             promptQuestions();
-  //           }
-  //         );
-  //       });
-  //   }
-  // );
-};
+function updateEmpRole() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "updaterole",
+        message: "Which role would you like to update?",
+        choices: roles
+      }
+    ])
+    .then(val => {
+      connection.query(
+        "SELECT * FROM role WHERE title = ?",
+        [val.updaterole],
+        function(err, res) {
+          if (err) throw err;
+          console.log(chalk.cyan("Current role:"));
+          console.table(res);
+          inquirer
+            .prompt([
+              {
+                type: "input",
+                name: "title",
+                message: "What is the title of the role?"
+              },
+              {
+                type: "input",
+                name: "salary",
+                message: "What is the salary of the role?"
+              },
+              {
+                type: "list",
+                name: "department",
+                message: "What department does the role belong to?",
+                choices: departments
+              }
+            ])
+            .then(val2 => {
+              connection.query(
+                "SELECT * FROM department WHERE name = ?",
+                [val2.department],
+                function(err, res2) {
+                  if (err) throw err;
+                  connection.query(
+                    "UPDATE role SET title = ?, salary = ?, department_id = ? WHERE title = ?",
+                    [val2.title, val2.salary, res2[0].id, val.updaterole]
+                  );
+                  console.log(chalk.magenta("Database Updated.\n"));
+                  viewAllRole();
+                  promptQuestions();
+                }
+              );
+            });
+        }
+      );
+    });
+}
 
 function quit() {
-  console.log("quit");
+  //console.log("quit");
   connection.end();
 }
