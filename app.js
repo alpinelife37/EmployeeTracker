@@ -295,7 +295,6 @@ function updateEmpRole() {
                     "UPDATE role SET title = ?, salary = ?, department_id = ? WHERE title = ?",
                     [val2.title, val2.salary, res2[0].id, val.updaterole]
                   );
-                  console.log(chalk.magenta("Database Updated.\n"));
                   viewAllRole();
                   promptQuestions();
                 }
