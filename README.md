@@ -6,7 +6,7 @@
 
 Node app that starts connects to a database and allows the user to view employees/roles/departments, add employees/roles/departments, and update roles.
 
-![Example profile](./assets/example.png)
+![Example profile](./Assets/example.png)
 
 ### INSTALLATION INSTRUCTIONS
 
